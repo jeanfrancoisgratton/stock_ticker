@@ -1,3 +1,6 @@
-# stock_ticker
+<img src="./images/stock_ticker_banner.png" alt="st logo" height="384" width="768" />
 
-Put your description here. This is what will be shown on the repo main page.
+# STOCK TICKER
+___
+
+A stock market simulation/game

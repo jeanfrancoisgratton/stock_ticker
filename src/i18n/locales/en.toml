@@ -1,0 +1,33 @@
+# English (base language) — stock labels.
+# The table key (e.g. stock_gold) is the stable message ID; only the value on
+# the "other" line is the displayed text. Change values freely.
+
+[stock_gold]
+other = "Gold"
+
+[stock_silver]
+other = "Silver"
+
+[stock_platinum]
+other = "Platinum"
+
+[stock_oil]
+other = "Oil"
+
+[stock_copper]
+other = "Copper"
+
+[stock_social_media]
+other = "Social Media"
+
+[stock_type07]
+other = "Type 07"
+
+[stock_type08]
+other = "Type 08"
+
+[stock_type09]
+other = "Type 09"
+
+[stock_type10]
+other = "Type 10"
