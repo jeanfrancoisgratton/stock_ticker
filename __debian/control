@@ -1,0 +1,8 @@
+Package: stock_ticker
+Version: 0.0.1-1
+Architecture: amd64
+Maintainer: J.F. Gratton <jean-francois@famillegratton.net>
+Description: Stock Ticker game adaptation
+Section: Games
+Depends: 
+

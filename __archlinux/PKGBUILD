@@ -1,0 +1,48 @@
+# Maintainer: J.F.Gratton <jean-francois@famillegratton.net>
+# Packager: Package builder <builder@famillegratton.net>
+
+pkgname=stock_ticker
+pkgver=0.0.1
+pkgrel=1
+pkgdesc="Stock Ticker game adaptation"
+arch=('x86_64')
+url="{{ URL }}"
+license=('GPL-2.0-only')
+
+makedepends=('go')
+depends=()
+
+optdepends=()
+
+options=('!debug')
+
+_binaryname='stockticker'
+_builddir="${pkgname}-${pkgver}"
+
+prepare() {
+  rm -rf "${srcdir:?}/${_builddir}"
+  mkdir -p "${srcdir}/${_builddir}"
+
+  cp -a "${startdir}/../src/." "${srcdir}/${_builddir}/"
+}
+
+build() {
+  cd "${srcdir}/${_builddir}"
+
+  export CGO_ENABLED=0
+  export GOPATH="${srcdir}/gopath"
+  export GOMODCACHE="${GOPATH}/pkg/mod"
+
+  go build -trimpath -mod=readonly -modcacherw -ldflags="-s -w -buildid=" -o "${_binaryname}" .
+}
+
+check() {
+  cd "${srcdir}/${_builddir}"
+  go test -modcacherw ./...
+}
+
+package() {
+  cd "${srcdir}/${_builddir}"
+
+  install -Dm0755 "${_binaryname}" "${pkgdir}/opt/bin/${_binaryname}"
+}
