@@ -1,8 +1,8 @@
 # Maintainer: J.F. Gratton <jean-francois@famillegratton.net>
 # Packager: Build packager <builder@famillegratton.net>
-pkgname=stock_ticker
+pkgname=stockticker
 pkgver=0.0.1
-pkgrel=1
+pkgrel=2
 pkgdir=/data/packages
 pkgdesc="Stock Ticker game adaptation"
 url="https://git.famillegratton.net:3000/mainline/stock_ticker.git"
