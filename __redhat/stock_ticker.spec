@@ -58,6 +58,12 @@ install -Dpm 0755 %{_builddir}/%{name}-%{version}/%{_binaryname_daemon} %{buildr
 
 
 %changelog
+* Tue Aug 11 2026 Binary package builder <builder@famillegratton.net> 0.0.1-3
+- RPMBUILDER: fixed tagging issue
+- chore: update changelog for 0.0.1-2
+- Merge branch 'develop'
+- BUILDERS: changed package name
+
 * Tue Aug 11 2026 Binary package builder <builder@famillegratton.net> 0.0.1-2
 - Merge branch 'develop'
 - BUILDERS: changed package name
