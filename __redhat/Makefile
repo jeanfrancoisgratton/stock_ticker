@@ -8,10 +8,20 @@ DEST      := /data
 REPOROOT  := $(shell git rev-parse --show-toplevel)
 NEXUSREPO := dnfLocal
 TAG       := v0.0.1
+SRCDIR    := ../src
 
-.PHONY: tag release tarball check-tags changelog rpm rpmcl upload commitcl clean
+.PHONY: tag release tarball check-tags changelog rpm rpmcl upload commitcl clean client daemon
 
 # Intended workflow: make release
+
+# Dev-only smoke builds; not part of the rpmbuild pipeline, and deliberately
+# independent of src/*/build.sh (those are per-machine dev scripts, not meant
+# to be relied on by packaging). Output is discarded.
+client:
+	cd $(SRCDIR) && CGO_ENABLED=0 go build -o /dev/null ./client
+
+daemon:
+	cd $(SRCDIR) && CGO_ENABLED=0 go build -o /dev/null ./daemon
 
 tarball:
 	git -C $(REPOROOT) archive --prefix=$(NAME)-$(VERSION)/ HEAD \

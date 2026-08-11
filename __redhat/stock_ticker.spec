@@ -2,12 +2,11 @@
 %define _build_id_links none
 %define _name stock_ticker
 %define _prefix /opt
-%define _bash_completionsdir /usr/share/bash-completion/completions
-%define _zsh_completionsdir  /usr/share/zsh/site-functions
 %define _version 0.0.1
 %define _rel 1
 %define _arch x86_64
 %define _binaryname stockticker
+%define _binaryname_daemon %{_binaryname}Daemon
 
 Name:       stock_ticker
 Version:    %{_version}
@@ -33,7 +32,8 @@ Stock Ticker game adaptation
 %build
 cd src
 go mod download
-PATH=$PATH:/opt/go/bin CGO_ENABLED=0 go build -trimpath -ldflags="-s -w -buildid=" -o %{_builddir}/%{name}-%{version}/%{_binaryname} .
+PATH=$PATH:/opt/go/bin CGO_ENABLED=0 go build -trimpath -ldflags="-s -w -buildid=" -o %{_builddir}/%{name}-%{version}/%{_binaryname} ./client
+PATH=$PATH:/opt/go/bin CGO_ENABLED=0 go build -trimpath -ldflags="-s -w -buildid=" -o %{_builddir}/%{name}-%{version}/%{_binaryname_daemon} ./daemon
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -43,29 +43,18 @@ rm -rf $RPM_BUILD_ROOT
 %install
 rm -rf %{buildroot}
 install -Dpm 0755 %{_builddir}/%{name}-%{version}/%{_binaryname} %{buildroot}%{_bindir}/%{_binaryname}
+install -Dpm 0755 %{_builddir}/%{name}-%{version}/%{_binaryname_daemon} %{buildroot}%{_sbindir}/%{_binaryname_daemon}
 
 %post
-# Bash completion — always install
-%{_bindir}/%{_binaryname} completion bash > %{_bash_completionsdir}/{_binaryname}
-
-# Zsh completion — only if zsh is present
-if command -v zsh > /dev/null 2>&1; then
-    mkdir -p %{_zsh_completionsdir}/zsh/site-functions
-    %{_bindir}/%{_binaryname} completion zsh > %{_zsh_completionsdir}/_{_binaryname}
-fi
 
 %preun
 
 %postun
-if [ $1 -eq 0 ]; then
-    # $1 == 0 means this is a full uninstall, not an upgrade
-    rm -f %{_bash_completionsdir}/{_binaryname
-    rm -f %{_zsh_completionsdir}/_{_binaryname
-fi
 
 %files
 %defattr(0755,root,root,-)
 %{_bindir}/%{_binaryname}
+%{_sbindir}/%{_binaryname_daemon}
 
 
 %changelog
