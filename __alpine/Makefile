@@ -30,9 +30,12 @@ DAEMON_BINARY := $(shell . ./$(APKBUILD); echo $$binaryname_daemon)
 
 NEXUSREPO := apkLocal
 
-# abuild -r drops the package at:
-#   /data/packages/<name>/<arch>/<name>-<version>-r<pkgrel>.apk
-APK       := /data/packages/$(NAME)/$(ARCH)/$(NAME)-$(VERSION)-r$(PKGREL).apk
+# abuild -r drops the package at $REPODEST/$repo/$arch/<name>-<version>-r<pkgrel>.apk,
+# where $repo is the name of the directory *containing* $startdir (this project's
+# checkout directory, e.g. "stock_ticker") — not pkgname. Deriving it from CURDIR
+# instead of $(NAME) keeps this correct even if pkgname is renamed again.
+REPO      := $(notdir $(patsubst %/,%,$(dir $(CURDIR))))
+APK       := /data/packages/$(REPO)/$(ARCH)/$(NAME)-$(VERSION)-r$(PKGREL).apk
 
 .PHONY: build client daemon release clean info
 
@@ -64,4 +67,5 @@ info:
 	@echo "ARCH          = $(ARCH)"
 	@echo "BINARY        = $(BINARY)"
 	@echo "DAEMON_BINARY = $(DAEMON_BINARY)"
+	@echo "REPO          = $(REPO)"
 	@echo "APK           = $(APK)"

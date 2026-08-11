@@ -2,7 +2,7 @@
 # Packager: Build packager <builder@famillegratton.net>
 pkgname=stockticker
 pkgver=0.0.1
-pkgrel=3
+pkgrel=4
 pkgdesc="Stock Ticker game adaptation"
 url="https://git.famillegratton.net:3000/mainline/stock_ticker.git"
 arch=x86_64
