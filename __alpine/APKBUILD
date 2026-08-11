@@ -14,6 +14,7 @@ install="$pkgname.pre-install $pkgname.post-install $pkgname.pre-upgrade $pkgnam
 builddir="$startdir/src/BUILD"
 
 binaryname=stockticker
+binaryname_daemon="${binaryname}Daemon"
 
 prepare() {
 	mkdir -p "$builddir"
@@ -25,11 +26,13 @@ build() {
 
 	go env | egrep 'GOFLAGS|CGO_ENABLED|GOOS|GOARCH' || true
 
-	# Static, non-PIE, internal linker
-	go build -trimpath -ldflags="-s -w -buildid= -linkmode=internal" -o "$binaryname" .
+	# Static, non-PIE, internal linker. One module, two entrypoints under it.
+	go build -trimpath -ldflags="-s -w -buildid= -linkmode=internal" -o "$binaryname" ./client
+	go build -trimpath -ldflags="-s -w -buildid= -linkmode=internal" -o "$binaryname_daemon" ./daemon
 }
 
 package() {
 	install -d "$pkgdir"/opt/bin
 	install -m755 "$builddir/$binaryname" "$pkgdir/opt/bin/$binaryname"
+	install -m755 "$builddir/$binaryname_daemon" "$pkgdir/opt/sbin/$binaryname_daemon"
 }
