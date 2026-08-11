@@ -1,28 +1,37 @@
 # stock_ticker — Arch Linux (pacman) packaging
 #
 # Recipes:
-#   make build     -> makepkg (build the package into PKGDEST)
+#   make build     -> makepkg (build the package into PKGDEST); builds both binaries
+#   make client    -> dev-only: compile-check just the client binary, discarding
+#                      output; skips the makepkg pipeline entirely
+#   make daemon    -> dev-only: compile-check just the daemon binary, discarding
+#                      output; skips the makepkg pipeline entirely
 #   make release   -> refresh the pacman DB (repo-add) then upload the package
 #                     and database files to the Nexus archLocal repo (with reindex)
 #   make clean     -> remove the makepkg working directories
 #   make info      -> print the values extracted from PKGBUILD
 #
-# Package metadata (name / version / pkgrel / arch / binary) is read straight
-# from PKGBUILD so there is a single source of truth.
+# Package metadata (name / version / pkgrel / arch / binaries) is read straight
+# from PKGBUILD so there is a single source of truth. There is one package for
+# both binaries: PKGBUILD's build() compiles client and daemon from the same
+# copied src/ tree (one Go module, two ./client and ./daemon entrypoints),
+# package() installs client to /opt/bin and daemon to /opt/sbin.
 
 SHELL := /bin/bash
 
 PKGBUILD  := PKGBUILD
 
-NAME      := $(shell . ./$(PKGBUILD); echo $$pkgname)
-VERSION   := $(shell . ./$(PKGBUILD); echo $$pkgver)
-PKGREL    := $(shell . ./$(PKGBUILD); echo $$pkgrel)
-ARCH      := $(shell . ./$(PKGBUILD); echo $${arch[0]})
-BINARY    := $(shell . ./$(PKGBUILD); echo $$_binaryname)
+NAME          := $(shell . ./$(PKGBUILD); echo $$pkgname)
+VERSION       := $(shell . ./$(PKGBUILD); echo $$pkgver)
+PKGREL        := $(shell . ./$(PKGBUILD); echo $$pkgrel)
+ARCH          := $(shell . ./$(PKGBUILD); echo $${arch[0]})
+BINARY        := $(shell . ./$(PKGBUILD); echo $$_binaryname)
+DAEMON_BINARY := $(shell . ./$(PKGBUILD); echo $$_binaryname_daemon)
 
 NEXUSREPO := archLocal
 PKGDEST   := /data
 PKGEXT    := pkg.tar.zst
+SRCDIR    := ../src
 
 # Arch database (repo-add) refresh: the pacman DB lives in the Nexus repo as
 # <REPONAME>.db{,.tar.zst} / <REPONAME>.files{,.tar.zst}. Before uploading a new
@@ -35,11 +44,20 @@ STAGING   := $(PKGDEST)/_staging
 # makepkg drops the package at: $PKGDEST/<name>-<version>-<pkgrel>-<arch>.<PKGEXT>
 PKG       := $(PKGDEST)/$(NAME)-$(VERSION)-$(PKGREL)-$(ARCH).$(PKGEXT)
 
-.PHONY: build release clean info
+.PHONY: build client daemon release clean info
 
 build:
 	rm -rf src pkg
 	PKGDEST=$(PKGDEST) makepkg --force --syncdeps --noconfirm
+
+# Dev-only smoke builds; not part of the makepkg pipeline, and deliberately
+# independent of src/*/build.sh (those are per-machine dev scripts, not meant
+# to be relied on by packaging). Output is discarded.
+client:
+	cd $(SRCDIR) && CGO_ENABLED=0 go build -o /dev/null ./client
+
+daemon:
+	cd $(SRCDIR) && CGO_ENABLED=0 go build -o /dev/null ./daemon
 
 release: build
 	# --- refresh the Arch repo database with the freshly built package ---
@@ -64,9 +82,10 @@ clean:
 	rm -rf src pkg
 
 info:
-	@echo "NAME    = $(NAME)"
-	@echo "VERSION = $(VERSION)"
-	@echo "PKGREL  = $(PKGREL)"
-	@echo "ARCH    = $(ARCH)"
-	@echo "BINARY  = $(BINARY)"
-	@echo "PKG     = $(PKG)"
+	@echo "NAME          = $(NAME)"
+	@echo "VERSION       = $(VERSION)"
+	@echo "PKGREL        = $(PKGREL)"
+	@echo "ARCH          = $(ARCH)"
+	@echo "BINARY        = $(BINARY)"
+	@echo "DAEMON_BINARY = $(DAEMON_BINARY)"
+	@echo "PKG           = $(PKG)"

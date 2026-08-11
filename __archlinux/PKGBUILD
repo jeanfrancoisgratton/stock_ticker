@@ -17,6 +17,7 @@ optdepends=()
 options=('!debug')
 
 _binaryname='stockticker'
+_binaryname_daemon="${_binaryname}Daemon"
 _builddir="${pkgname}-${pkgver}"
 
 prepare() {
@@ -33,7 +34,8 @@ build() {
   export GOPATH="${srcdir}/gopath"
   export GOMODCACHE="${GOPATH}/pkg/mod"
 
-  go build -trimpath -mod=readonly -modcacherw -ldflags="-s -w -buildid=" -o "${_binaryname}" .
+  go build -trimpath -mod=readonly -modcacherw -ldflags="-s -w -buildid=" -o "${_binaryname}" ./client
+  go build -trimpath -mod=readonly -modcacherw -ldflags="-s -w -buildid=" -o "${_binaryname_daemon}" ./daemon
 }
 
 check() {
@@ -45,4 +47,5 @@ package() {
   cd "${srcdir}/${_builddir}"
 
   install -Dm0755 "${_binaryname}" "${pkgdir}/opt/bin/${_binaryname}"
+  install -Dm0755 "${_binaryname_daemon}" "${pkgdir}/opt/sbin/${_binaryname_daemon}"
 }
