@@ -31,7 +31,7 @@ var versionCmd = &cobra.Command{
 	Use:   "version",
 	Short: "Shows the software version",
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println(hftx.White("stockticker (daemon) v0.0.1-1 (2026.08.10), Go version = " + runtime.Version()))
+		fmt.Println(hftx.White("stockticker (daemon) v0.0.1 (2026.08.10), Go version = " + runtime.Version()))
 	},
 }
 
