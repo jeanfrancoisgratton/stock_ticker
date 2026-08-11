@@ -2,8 +2,7 @@
 # Packager: Build packager <builder@famillegratton.net>
 pkgname=stockticker
 pkgver=0.0.1
-pkgrel=2
-pkgdir=/data/packages
+pkgrel=3
 pkgdesc="Stock Ticker game adaptation"
 url="https://git.famillegratton.net:3000/mainline/stock_ticker.git"
 arch=x86_64
@@ -32,7 +31,7 @@ build() {
 }
 
 package() {
-	install -d "$pkgdir"/opt/bin
+	install -d "$pkgdir"/opt/bin "$pkgdir"/opt/sbin
 	install -m755 "$builddir/$binaryname" "$pkgdir/opt/bin/$binaryname"
 	install -m755 "$builddir/$binaryname_daemon" "$pkgdir/opt/sbin/$binaryname_daemon"
 }
