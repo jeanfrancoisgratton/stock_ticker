@@ -1,7 +1,7 @@
 package main
 
 import (
-	"stock_ticker/cmd"
+	"stock_ticker/daemon/cmd"
 )
 
 func main() {

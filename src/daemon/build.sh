@@ -2,7 +2,7 @@
 
 set -eu
 
-BINARY=stockticker
+BINARY=stocktickerDaemon
 OUTPUT="/opt/bin"
 DRY_RUN=false
 

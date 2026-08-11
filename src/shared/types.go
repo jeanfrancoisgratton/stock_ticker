@@ -1,9 +1,9 @@
 // stock_ticker
 // Written by J.F.Gratton <jean-francois.gratton@aylo.com>
 // Original timestamp : 2026.08.10 17:36:07
-// Original filename : src/exec/types.go
+// Original filename : src/shared/types.go
 
-package exec
+package shared
 
 import "stock_ticker/i18n"
 
