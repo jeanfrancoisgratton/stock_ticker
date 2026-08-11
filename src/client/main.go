@@ -1,5 +1,9 @@
 package main
 
+import (
+	"stock_ticker/client/cmd"
+)
+
 func main() {
-	// TODO: client entrypoint
+	cmd.Execute()
 }
