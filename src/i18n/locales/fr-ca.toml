@@ -1,33 +1,33 @@
-# English (base language) — stock labels.
+# French-Canadian (base language) — stock labels.
 # The table key (e.g. stock_gold) is the stable message ID; only the value on
 # the "other" line is the displayed text. Change values freely.
 
 [stock_gold]
-other = "Gold"
+other = "Aurifères"
 
 [stock_silver]
-other = "Silver"
+other = "Argent"
 
 [stock_uranium]
 other = "Uranium"
 
 [stock_oil]
-other = "Oil"
+other = "Pétrole"
 
 [stock_transportation]
-other = "Transportation"
+other = "Transports"
 
 [stock_social_medias]
-other = "Social medias"
+other = "Médias sociaux"
 
 [stock_electronics]
-other = "Electronics"
+other = "Électronique"
 
 [stock_space]
-other = "Space"
+other = "Espace"
 
 [stock_health_insurance]
-other = "Health & insurances"
+other = "Santé & assurances"
 
 [stock_banking]
-other = "Banking"
+other = "Banques"

@@ -16,14 +16,14 @@ type StockType int
 const (
 	StockGold StockType = iota
 	StockSilver
-	StockPlatinum
+	StockUranium
 	StockOil
-	StockCopper
-	StockSocialMedia
-	StockType07
-	StockType08
-	StockType09
-	StockType10
+	StockTransportation
+	StockSocialMedias
+	StockElectronics
+	StockSpace
+	StockHealthInsurance
+	StockBanking
 
 	// StockCount is the number of stock types. Use it to size arrays
 	// (var prices [StockCount]float64) or bound iteration. Keep it last.
@@ -33,16 +33,16 @@ const (
 // messageIDs maps each stock to its i18n message ID. The ID is stable and is
 // never itself displayed — it is the key looked up in the locale catalogs.
 var messageIDs = [StockCount]string{
-	StockGold:        "stock_gold",
-	StockSilver:      "stock_silver",
-	StockPlatinum:    "stock_platinum",
-	StockOil:         "stock_oil",
-	StockCopper:      "stock_copper",
-	StockSocialMedia: "stock_social_media",
-	StockType07:      "stock_type07",
-	StockType08:      "stock_type08",
-	StockType09:      "stock_type09",
-	StockType10:      "stock_type10",
+	StockGold:            "stock_gold",
+	StockSilver:          "stock_silver",
+	StockUranium:         "stock_uranium",
+	StockOil:             "stock_oil",
+	StockTransportation:  "stock_transportation",
+	StockSocialMedias:    "stock_social_medias",
+	StockElectronics:     "stock_electronics",
+	StockSpace:           "stock_space",
+	StockHealthInsurance: "stock_health_insurance",
+	StockBanking:         "stock_banking",
 }
 
 // MessageID returns the localization key for the stock. It is stable and is
