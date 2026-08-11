@@ -3,7 +3,7 @@
 %define _name stockticker
 %define _prefix /opt
 %define _version 0.0.1
-%define _rel 2
+%define _rel 3
 %define _arch x86_64
 %define _binaryname stockticker
 %define _binaryname_daemon %{_binaryname}Daemon

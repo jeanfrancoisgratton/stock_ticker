@@ -7,7 +7,7 @@ RPMS      := $(HOME)/rpmbuild/RPMS
 DEST      := /data
 REPOROOT  := $(shell git rev-parse --show-toplevel)
 NEXUSREPO := dnfLocal
-TAG       := v0.0.1
+TAG       := v$(VERSION)
 SRCDIR    := ../src
 
 .PHONY: tag release tarball check-tags changelog rpm rpmcl upload commitcl clean client daemon
@@ -58,8 +58,12 @@ upload:
 	/opt/bin/nxtools upload -r $(NEXUSREPO) $(DEST)/$(NAME)-$(VERSION)-$(RELEASE).x86_64.rpm
 
 commitcl:
-	git add ${SPEC}
-	git commit -m "chore: update changelog for $(VERSION)-$(RELEASE)"
+	@git add ${SPEC}
+	@if git diff --cached --quiet -- ${SPEC}; then \
+	  echo "NOTE: no staged changes to $(SPEC), skipping changelog commit."; \
+	else \
+	  git commit -m "chore: update changelog for $(VERSION)-$(RELEASE)"; \
+	fi
 
 clean:
 	rm -f  $(SOURCES)/$(NAME)-$(VERSION).tar.gz
