@@ -5,12 +5,10 @@
 
 package shared
 
-import "stock_ticker/i18n"
-
 // StockType is the stable identity of a tradable stock. Code always refers to
 // the constant (StockGold, StockOil, ...), never to a string. This lets the
-// human-facing label change freely — even be localized — without touching any
-// game logic.
+// human-facing label change freely without touching any game logic, and keeps
+// display text out of the wire protocol.
 type StockType int
 
 const (
@@ -30,8 +28,8 @@ const (
 	StockCount
 )
 
-// messageIDs maps each stock to its i18n message ID. The ID is stable and is
-// never itself displayed — it is the key looked up in the locale catalogs.
+// messageIDs maps each stock to its stable message ID. This is the identity
+// that crosses the wire between daemon and client; it is never displayed.
 var messageIDs = [StockCount]string{
 	StockGold:            "stock_gold",
 	StockSilver:          "stock_silver",
@@ -45,8 +43,23 @@ var messageIDs = [StockCount]string{
 	StockBanking:         "stock_banking",
 }
 
-// MessageID returns the localization key for the stock. It is stable and is
-// never displayed directly.
+// labels maps each stock to its display text. Kept separate from messageIDs so
+// wording can change without touching the identity the protocol depends on.
+var labels = [StockCount]string{
+	StockGold:            "Gold",
+	StockSilver:          "Silver",
+	StockUranium:         "Uranium",
+	StockOil:             "Oil",
+	StockTransportation:  "Transportation",
+	StockSocialMedias:    "Social medias",
+	StockElectronics:     "Electronics",
+	StockSpace:           "Space",
+	StockHealthInsurance: "Health & insurances",
+	StockBanking:         "Banking",
+}
+
+// MessageID returns the stable identity key for the stock. This is what the
+// daemon and client exchange; it is never displayed directly.
 func (s StockType) MessageID() string {
 	if s < 0 || s >= StockCount {
 		return "stock_unknown"
@@ -54,11 +67,14 @@ func (s StockType) MessageID() string {
 	return messageIDs[s]
 }
 
-// String returns the stock's label in the currently active language (set via
-// i18n.SetLanguage). This is what you print; the underlying value stays a
-// stable enum. Implements fmt.Stringer, so StockGold formats as "Gold"/"Or"/…
+// String returns the stock's display label. This is what you print; the
+// underlying value stays a stable enum. Implements fmt.Stringer, so StockGold
+// formats as "Gold".
 func (s StockType) String() string {
-	return i18n.T(s.MessageID())
+	if s < 0 || s >= StockCount {
+		return "unknown"
+	}
+	return labels[s]
 }
 
 // Valid reports whether s is a defined stock type.

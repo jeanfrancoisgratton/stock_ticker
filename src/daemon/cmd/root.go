@@ -7,24 +7,14 @@ import (
 	"fmt"
 	"os"
 	"runtime"
-	"strings"
 
 	hftx "github.com/jeanfrancoisgratton/helperFunctions/v5/terminalfx"
 	"github.com/spf13/cobra"
-
-	"stock_ticker/i18n"
 )
-
-// langFlag holds the value of --lang; empty means auto-detect from the OS locale.
-var langFlag string
 
 var rootCmd = &cobra.Command{
 	Use:   "stock_ticker",
 	Short: "Stock market simulator DAEMON",
-	// Resolve the language once, before any subcommand runs.
-	PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
-		return i18n.SetLanguage(langFlag)
-	},
 }
 
 var versionCmd = &cobra.Command{
@@ -47,7 +37,4 @@ func init() {
 	rootCmd.CompletionOptions.DisableDefaultCmd = true
 
 	rootCmd.AddCommand(versionCmd)
-
-	rootCmd.PersistentFlags().StringVarP(&langFlag, "lang", "l", "",
-		"language ("+strings.Join(i18n.SupportedLanguages(), ", ")+"); default: OS locale")
 }
